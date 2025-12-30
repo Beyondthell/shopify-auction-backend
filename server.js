@@ -20,10 +20,30 @@ const SMTP_PASS = process.env.SMTP_PASS || 'password';
 let db;
 
 async function initDb() {
-  db = await open({
-    filename: './auction.db',
-    driver: sqlite3.Database
-  });
+  db = new sqlite3.Database('./auction.db');
+  await db.exec(`
+    CREATE TABLE IF NOT EXISTS auctions (
+      product_id TEXT PRIMARY KEY,
+      end_time TEXT,
+      highest_bid_amount REAL,
+      highest_bidder_name TEXT,
+      highest_bidder_email TEXT,
+      updated_at TEXT,
+      winner_notified_at TEXT
+    );
+  `);
+  await db.exec(`
+    CREATE TABLE IF NOT EXISTS bids (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      product_id TEXT NOT NULL,
+      email TEXT NOT NULL,
+      display_name TEXT NOT NULL,
+      amount REAL NOT NULL,
+      created_at TEXT NOT NULL
+    );
+  `);
+}
+
 
   await db.exec(`
     CREATE TABLE IF NOT EXISTS auctions (
