@@ -2,8 +2,8 @@ const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser');
 const sqlite3 = require('sqlite3').verbose();
-const { open } = require('sqlite');
 const nodemailer = require('nodemailer');
+
 
 // CONFIG
 const PORT = process.env.PORT || 4000;
